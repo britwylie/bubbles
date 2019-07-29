@@ -35,7 +35,7 @@ blur = cv2.blur(gray, (3,3))
 circles = cv2.HoughCircles(blur,cv2.HOUGH_GRADIENT, 1,15, param1 = 130, param2 = 20, minRadius = 2, maxRadius =50 )
  
 # set threshold 
-ret, thresh = cv2.threshold(gray, 137, 255, 0)
+thresh = cv2.threshold(gray, 5, 255, cv2.THRESH_BINARY_INV)[1]
 gray, contours = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
 
