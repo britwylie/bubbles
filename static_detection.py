@@ -22,3 +22,38 @@ import argparse
 ap = argparse.ArgumentParser()
 ap.add_argument("-i", "--image", help = "path to the image")
 args = vars(ap.parse_args())
+
+img = cv2.imread(args["image"])
+cv2.namedWindow('image')
+output = img.copy()
+gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+blur = cv2.blur(gray, (3,3))
+
+# detect circles in the image
+circles = cv2.HoughCircles(blur,cv2.HOUGH_GRADIENT, 1,50, param1 = 120, param2 = 20, minRadius = 2, maxRadius =50 )
+ 
+
+if circles is not None:
+	circles = np.round(circles[0, :]).astype("int")
+
+	# loop over (x,y) coordinates and radius of the circles
+	for (x, y, r) in circles:
+		# draw the circle in the output image, then draw a rectabgle
+		# corresponding to the center of the circle
+		cv2.circle(output, (x, y), r, (0, 255, 0), 4)
+		cv2.rectangle(output, (x - 5, y - 5), (x + 5, y + 5), (0, 128, 255), -1)
+ 
+	# show the output image
+	cv2.imshow("output", np.hstack([img, output]))
+	cv2.waitKey(0)
+	cv2.destroyAllWindows()
+
+cv2.destroyAllWindows()
+'''
+while(1):
+	cv2.imshow('image', img)
+	k = cv2.waitKey(1) & 0xFF
+
+	if(k == 27):
+		break
+'''
