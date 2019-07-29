@@ -13,3 +13,4 @@ __email__ = "bwylie@caltech.edu"
 __status__ = "Testing"
 
 import cv2
+import numpy as np
