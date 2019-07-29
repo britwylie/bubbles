@@ -26,19 +26,18 @@ args = vars(ap.parse_args())
 img = cv2.imread(args["image"])
 cv2.namedWindow('image')
 output = img.copy()
+# grayscale version of jpg
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+# blurred version of jpg
 blur = cv2.blur(gray, (3,3))
 
 # detect circles in the image
 circles = cv2.HoughCircles(blur,cv2.HOUGH_GRADIENT, 1,15, param1 = 130, param2 = 20, minRadius = 2, maxRadius =50 )
  
-ret, thresh = cv2.threshold(gray, 127, 255, 0)
-image, contours = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+# set threshold 
+ret, thresh = cv2.threshold(gray, 137, 255, 0)
+gray, contours = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
-imag = cv2.drawContours(imag, contours, -1, (0, 255, 0), 3)
-cv2.imshow("imag", imag)
-
-cv2.waitKey(0)
 
 
 if circles is not None:
