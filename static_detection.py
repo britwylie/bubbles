@@ -30,8 +30,16 @@ gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 blur = cv2.blur(gray, (3,3))
 
 # detect circles in the image
-circles = cv2.HoughCircles(blur,cv2.HOUGH_GRADIENT, 1,50, param1 = 120, param2 = 20, minRadius = 2, maxRadius =50 )
+circles = cv2.HoughCircles(blur,cv2.HOUGH_GRADIENT, 1,15, param1 = 130, param2 = 20, minRadius = 2, maxRadius =50 )
  
+ret, thresh = cv2.threshold(gray, 127, 255, 0)
+image, contours = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+
+imag = cv2.drawContours(imag, contours, -1, (0, 255, 0), 3)
+cv2.imshow("imag", imag)
+
+cv2.waitKey(0)
+
 
 if circles is not None:
 	circles = np.round(circles[0, :]).astype("int")
@@ -40,8 +48,8 @@ if circles is not None:
 	for (x, y, r) in circles:
 		# draw the circle in the output image, then draw a rectabgle
 		# corresponding to the center of the circle
-		cv2.circle(output, (x, y), r, (0, 255, 0), 4)
-		cv2.rectangle(output, (x - 5, y - 5), (x + 5, y + 5), (0, 128, 255), -1)
+		#cv2.circle(output, (x, y), r, (0, 255, 0), 1)
+		cv2.rectangle(output, (x - 5, y - 5), (x + 5, y + 5), (0, 128, 255), 1)
  
 	# show the output image
 	cv2.imshow("output", np.hstack([img, output]))
