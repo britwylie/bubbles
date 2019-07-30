@@ -1,8 +1,8 @@
 #! usr/bin/env python
 
 '''
- tracking.py: 
- Code run on Raspberry Pi to track bubbles
+ static_detection.py: 
+ Locate bubbles from a static image
 
  '''
 
