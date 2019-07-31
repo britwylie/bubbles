@@ -1,8 +1,8 @@
 #! usr/bin/env python
 
 '''
- static_detection.py: 
- Locate bubbles from a static image
+ blob_detection.py: 
+ Get blobs for min circles from a static image
 
  '''
 
@@ -68,27 +68,28 @@ if circles is not None:
 		# corresponding to the center of the circle
 		#cv2.circle(output, (x, y), r, (0, 255, 0), 1)
 		cv2.rectangle(hough_output, (x - 5, y - 5), (x + 5, y + 5), (0, 128, 255), 1)
-	
-	if contours is not None:
-
-	# min enclosing circle for contours
-		contour_list = []
-		for contour in contours:
-			# (x, y), radius = cv2.minEnclosingCircle(contour)
-			if cv2.contourArea(contour) < 10:
-				continue
-			
-			contour_list.append(contour)
-			# cv2.circle(contour_output, (int(x), int(y)), int(radius), (0, 0, 255), 1)
-
-		# add contours to copy of img
-		cv2.drawContours(contour_output, contour_list, -1, (0,255, 0), 1)
-
+ 
 	# show the output image
-	cv2.imshow("output", np.hstack([img, hough_output, contour_output]))
+	cv2.imshow("output", np.hstack([img, hough_output]))
 	cv2.waitKey(0)
 	cv2.destroyAllWindows()
+if contours is not None:
 
+	# min enclosing circle for contours
+	contour_list = []
+	for contour in contours:
+		# (x, y), radius = cv2.minEnclosingCircle(contour)
+		if cv2.contourArea(contour) < 10:
+			continue
+		
+		contour_list.append(contour)
+		
+		# cv2.circle(contour_output, (int(x), int(y)), int(radius), (0, 0, 255), 1)
+
+	# add contours to copy of img
+	cv2.drawContours(contour_output, contour_list, -1, (0,255, 0), 1)
+	cv2.imshow("contours", np.hstack([img, contour_output]))
+	cv2.waitKey(0)
 cv2.destroyAllWindows()
 '''
 while(1):
