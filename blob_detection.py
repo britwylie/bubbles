@@ -31,11 +31,14 @@ blob_out = img.copy()
 
 # grayscale version of jpg
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+blur = cv2.GaussianBlur(gray, (3,3), 0)
+_, thresh = cv2.threshold(blur, 127, 255, cv2.THRESH_BINARY_INV)
+
 
 params = cv2.SimpleBlobDetector_Params()
 
 params.filterByColor = True
-params.blobColor = 255
+params.blobColor = 0
 params.minThreshold = 10
 params.maxThreshold = 200
 
@@ -46,7 +49,7 @@ if is_v2:
 else:
     detector = cv2.SimpleBlobDetector_create()
 
-keypoints = detector.detect(gray)
+keypoints = detector.detect(thresh)
 
 # cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS ensures the size of the circle corresponds to the size of blob
 im_with_keypoints = cv2.drawKeypoints(blob_out, keypoints, np.array([]), (0,0,255), cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
