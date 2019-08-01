@@ -24,20 +24,21 @@ ap = argparse.ArgumentParser()
 ap.add_argument("-i", "--image", help = "path to the image")
 args = vars(ap.parse_args())
 
-img = cv2.imread(args["image"])
+img = cv2.imread(args["image"])	
 cv2.namedWindow('image')
 hough_output = img.copy()
 
 # grayscale version of jpg
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-blur = cv2.GaussianBlur(gray, (7,7), 0)
-_, thresh = cv2.threshold(blur, 5, 240, cv2.THRESH_TOZERO)
+blur = cv2.GaussianBlur(gray, (3,3), 0)
+_, thresh = cv2.threshold(blur, 127, 255, cv2.THRESH_BINARY)
 dilated = cv2.dilate(thresh, None, iterations = 3)
 
 
 
 # detect circles in the image
-circles = cv2.HoughCircles(dilated, cv2.HOUGH_GRADIENT, 1, 10, param1 = 130, param2 = 20, minRadius = 2, maxRadius =50 )
+circles = cv2.HoughCircles(blur,cv2.HOUGH_GRADIENT, 1, 15,\
+ param1 = 130, param2 = 20, minRadius = 2, maxRadius =50 )
 
 
 if circles is not None:
@@ -47,7 +48,7 @@ if circles is not None:
 	for (x, y, r) in circles:
 		# draw the circle in the output image, then draw a rectabgle
 		# corresponding to the center of the circle
-		# cv2.circle(output, (x, y), r, (0, 255, 0), 1)
+		cv2.circle(hough_output, (x,  y), r, (0, 255, 0), 1)
 		cv2.rectangle(hough_output, (x - 5, y - 5), (x + 5, y + 5), (0, 128, 255), 1)
 
 	# show the output image
