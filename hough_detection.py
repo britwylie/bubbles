@@ -17,6 +17,8 @@ import cv2
 import numpy as np
 from matplotlib import pyplot as plt
 import argparse
+import matplotlib.cm as cm
+import matplotlib.image as mpimg
 
 
 # cmd arguments
@@ -30,11 +32,32 @@ hough_output = img.copy()
 
 # grayscale version of jpg
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-blur = cv2.GaussianBlur(gray, (3,3), 0)
+blur = cv2.GaussianBlur(gray, (5,5), 0)
 _, thresh = cv2.threshold(blur, 127, 255, cv2.THRESH_BINARY)
 dilated = cv2.dilate(thresh, None, iterations = 3)
 
+# plot preprocessed images
+fig, ax = plt.subplots(2, 2)
+fig.subplots_adjust(hspace=0, wspace=0)
 
+ax[0,0].imshow(blur, cmap = 'gray')
+ax[0,0].set_title("Blurred")
+ax[0,0].axis('off')
+
+ax[0,1].imshow(gray, cmap = 'gray')
+ax[0,1].set_title("Grayscale")
+ax[0,1].axis('off')
+
+ax[1,0].imshow(thresh, cmap = 'gray')
+ax[1,0].set_title("Threshold")
+ax[1,0].axis('off')
+
+ax[1,1].imshow(dilated, cmap = 'gray')
+ax[1,1].set_title("Dilated")
+ax[1,1].axis('off')
+
+plt.show()
+cv2.waitKey(0)
 
 # detect circles in the image
 circles = cv2.HoughCircles(blur,cv2.HOUGH_GRADIENT, 1, 15,\
@@ -55,5 +78,6 @@ if circles is not None:
 	cv2.imshow("output", np.hstack([img, hough_output]))
 	cv2.waitKey(0)
 	cv2.destroyAllWindows()
+	
 
 cv2.destroyAllWindows()
