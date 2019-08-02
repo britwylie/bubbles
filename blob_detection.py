@@ -32,8 +32,24 @@ blob_out = img.copy()
 # grayscale version of jpg
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 blur = cv2.GaussianBlur(gray, (3,3), 0)
-_, thresh = cv2.threshold(blur, 127, 255, cv2.THRESH_BINARY_INV)
 
+erode = cv2.erode(blur, None, iterations = 2)
+dil = cv2.dilate(erode, None, iterations = 2)
+
+th, im_th = cv2.threshold(dil, 127,255, cv2.THRESH_BINARY_INV);
+
+im_floodfill = cv2.equalizeHist(im_th.copy())
+
+# Mask used to flood filling.
+# Notice the size needs to be 2 pixels than the image.
+h, w = im_th.shape[:2]
+mask = np.zeros((h+2, w+2), np.uint8)
+ 
+# Floodfill from point (0, 0)
+cv2.floodFill(im_floodfill, mask, (0,0), 255);
+#_, thresh = cv2.threshold(blur, 127, 255, cv2.THRESH_BINARY_INV)
+
+cv2.imshow("Input Image to detector", im_floodfill)
 
 params = cv2.SimpleBlobDetector_Params()
 
@@ -49,7 +65,7 @@ if is_v2:
 else:
     detector = cv2.SimpleBlobDetector_create()
 
-keypoints = detector.detect(thresh)
+keypoints = detector.detect(im_floodfill)
 
 # cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS ensures the size of the circle corresponds to the size of blob
 im_with_keypoints = cv2.drawKeypoints(blob_out, keypoints, np.array([]), (0,0,255), cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)

@@ -2,8 +2,8 @@
 
 '''
  hough_detection.py: 
- Locate bubbles from a static image using the hough circle algorithm
-
+ Locate bubbles from a static image using the hough circle detection algorithm
+ Preprocessing needs refine
  '''
 
 __author__ = "Brit Wylie"
@@ -32,10 +32,21 @@ hough_output = img.copy()
 
 # grayscale version of jpg
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-blur = cv2.GaussianBlur(gray, (5,5), 0)
-_, thresh = cv2.threshold(blur, 127, 255, cv2.THRESH_BINARY)
-dilated = cv2.dilate(thresh, None, iterations = 3)
+blur = cv2.GaussianBlur(gray, (5, 5), 0)
+erode = cv2.erode(blur, None, iterations = 3)
+dilated = cv2.dilate(erode, None, iterations = 3)
+test = cv2.equalizeHist(dilated)
 
+
+
+_, thresh = cv2.threshold(dilated, 127, 255, cv2.THRESH_BINARY)
+laplac = cv2.Canny(gray, 100, 200)
+
+cv2.imshow("Blurred", blur)
+cv2.imshow("Dilated", dilated)
+cv2.imshow("test", test)
+cv2.imshow("Laplacian", laplac)
+'''
 # plot preprocessed images
 fig, ax = plt.subplots(2, 2)
 fig.subplots_adjust(hspace=0, wspace=0)
@@ -57,11 +68,12 @@ ax[1,1].set_title("Dilated")
 ax[1,1].axis('off')
 
 plt.show()
+'''
 cv2.waitKey(0)
 
 # detect circles in the image
-circles = cv2.HoughCircles(blur,cv2.HOUGH_GRADIENT, 1, 15,\
- param1 = 130, param2 = 20, minRadius = 2, maxRadius =50 )
+circles = cv2.HoughCircles(laplac,cv2.HOUGH_GRADIENT, 1, 15,\
+ param1 = 130, param2 = 20, minRadius = 0, maxRadius =50)
 
 
 if circles is not None:
