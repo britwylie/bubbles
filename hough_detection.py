@@ -32,20 +32,31 @@ hough_output = img.copy()
 
 # grayscale version of jpg
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-blur = cv2.GaussianBlur(gray, (5, 5), 0)
-erode = cv2.erode(blur, None, iterations = 3)
-dilated = cv2.dilate(erode, None, iterations = 3)
-test = cv2.equalizeHist(dilated)
+blur = cv2.GaussianBlur(gray, (3, 3), 0)
 
 
+_, thresh = cv2.threshold(gray, 145, 255, cv2.THRESH_BINARY_INV)
+#test = cv2.equalizeHist(thresh)
+laplac = cv2.Canny(thresh, 100, 200)
+inv_laplac = cv2.bitwise_not(laplac)
+erode = cv2.erode(inv_laplac, None, iterations = 1)
+dilated = cv2.dilate(erode, None, iterations = 1)
 
-_, thresh = cv2.threshold(dilated, 127, 255, cv2.THRESH_BINARY)
-laplac = cv2.Canny(gray, 100, 200)
+im_floodfill = dilated.copy()
+# Mask used to flood filling.
+# Notice the size needs to be 2 pixels than the image.
+h, w = dilated.shape[:2]
+mask = np.zeros((h+2, w+2), np.uint8)
+# Floodfill from point (0, 0)
+cv2.floodFill(im_floodfill, mask, (0,0), 255);
+
+cv2.imshow("Input Image to detector", im_floodfill)
 
 cv2.imshow("Blurred", blur)
 cv2.imshow("Dilated", dilated)
-cv2.imshow("test", test)
-cv2.imshow("Laplacian", laplac)
+#cv2.imshow("test", test)
+cv2.imshow("Threshold", thresh)
+cv2.imshow("Laplacian", inv_laplac)
 '''
 # plot preprocessed images
 fig, ax = plt.subplots(2, 2)
@@ -72,8 +83,8 @@ plt.show()
 cv2.waitKey(0)
 
 # detect circles in the image
-circles = cv2.HoughCircles(laplac,cv2.HOUGH_GRADIENT, 1, 15,\
- param1 = 130, param2 = 20, minRadius = 0, maxRadius =50)
+circles = cv2.HoughCircles(im_floodfill,cv2.HOUGH_GRADIENT, 0.5, 5,\
+ param1 = 70, param2 = 30, minRadius = 2, maxRadius = 10)
 
 
 if circles is not None:

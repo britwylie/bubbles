@@ -33,10 +33,11 @@ blob_out = img.copy()
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 blur = cv2.GaussianBlur(gray, (3,3), 0)
 
-erode = cv2.erode(blur, None, iterations = 2)
+
+erode = cv2.erode(blur, None, iterations = 1)
 dil = cv2.dilate(erode, None, iterations = 2)
 
-th, im_th = cv2.threshold(dil, 127,255, cv2.THRESH_BINARY_INV);
+th, im_th = cv2.threshold(dil, 150,190, cv2.THRESH_BINARY_INV);
 
 im_floodfill = cv2.equalizeHist(im_th.copy())
 
@@ -55,8 +56,19 @@ params = cv2.SimpleBlobDetector_Params()
 
 params.filterByColor = True
 params.blobColor = 0
-params.minThreshold = 10
+
+params.minThreshold = 30
 params.maxThreshold = 200
+
+params.minDistBetweenBlobs = 3
+
+params.filterByArea = True
+params.minArea = 5
+params.maxArea = 100
+
+params.filterByConvexity = True
+params.minConvexity = 0.8
+
 
 ## check opencv version and construct the detector
 is_v2 = cv2.__version__.startswith("2.")
