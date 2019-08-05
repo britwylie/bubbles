@@ -80,8 +80,8 @@ mask = cv2.inRange(img, lower_bound, upper_bound)
 
 kernel = np.ones((3, 3), np.uint8)
 
-#Use erosion and dilation combination to eliminate false positives. 
-#In this case the text Q0X could be identified as circles but it is not.
+# Use erosion and dilation combination to eliminate false positives. 
+# In this case the text Q0X could be identified as circles but it is not.
 mask = cv2.erode(mask, kernel, iterations=1)
 mask = cv2.dilate(mask, kernel, iterations=1)
 
