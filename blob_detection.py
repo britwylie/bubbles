@@ -35,7 +35,7 @@ blur = cv2.GaussianBlur(gray, (3,3), 0)
 
 
 erode = cv2.erode(blur, None, iterations = 1)
-dil = cv2.dilate(erode, None, iterations = 2)
+dil = cv2.dilate(erode, None, iterations = 1)
 
 th, im_th = cv2.threshold(dil, 150,190, cv2.THRESH_BINARY_INV);
 
@@ -63,12 +63,16 @@ params.maxThreshold = 200
 params.minDistBetweenBlobs = 3
 
 params.filterByArea = True
-params.minArea = 5
-params.maxArea = 100
+params.minArea = 1
+params.maxArea = 10
 
-params.filterByConvexity = True
-params.minConvexity = 0.8
+params.filterByConvexity = False
+params.minConvexity = 0.2
 
+params.filterByCircularity = True
+params.minCircularity = 0.1
+
+params.filterByInertia = False
 
 ## check opencv version and construct the detector
 is_v2 = cv2.__version__.startswith("2.")
