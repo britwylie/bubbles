@@ -67,7 +67,9 @@ cv2.imshow("Closed holes", closed)
 
 
 cv2.waitKey(0)
-'''
+
+# contour creation
+
 lower_bound = np.array([0,0,10])
 upper_bound = np.array([255,255,195])
 
@@ -87,23 +89,24 @@ mask = cv2.dilate(mask, kernel, iterations=1)
 
 closing = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernel)
 
+
 contours = cv2.findContours(mask.copy(), cv2.RETR_EXTERNAL,
-        cv2.CHAIN_APPROX_SIMPLE)[1]
+        cv2.CHAIN_APPROX_SIMPLE)[0]
 
-c = contours.tolist()
-c.sort(key=lambda x:cv2.boundingRect(x)[0])
+if contours is not None:
+	contours = sorted(contours, key=lambda x:cv2.contourArea(x))
 
-array = []
-ii = 1
-#print len(contours)
-for c in contours:
-    (x,y),r = cv2.minEnclosingCircle(c)
-    center = (int(x),int(y))
-    r = int(r)
-    if r >= 6 and r<=10:
-        cv2.circle(image,center,r,(0,255,0),2)
-        array.append(center)
+	array = []
+	ii = 1
+	print(len(contours))
+	for c in contours:
+	    (x,y),r = cv2.minEnclosingCircle(c)
+	    center = (int(x),int(y))
+	    r = int(r)
+	    if r >= 6 and r<=10:
+	        cv2.circle(image,center,r,(0,255,0),2)
+	        array.append(center)
 
-cv2.imshow("preprocessed", image_color)
+	cv2.imshow("preprocessed", img)
 
-'''
+cv2.waitKey(0)
