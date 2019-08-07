@@ -13,5 +13,5 @@ First project using OpenCV in Python to track and count bubbles in a tube.
 **Packages/Programs:**
 * OpenCV
 * fswebcam
-* NeoPixel
+* NeoPixel library (instructions [here](https://www.raspberrypi.org/magpi/neopixels-python/))
 * picamera
