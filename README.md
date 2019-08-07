@@ -10,8 +10,8 @@ First project using OpenCV in Python to track and count bubbles in a tube.
 * box
 * tube of bubbles
 
-Packages/Programs:
-*OpenCV
-*fswebcam
-*NeoPixel
-*picamera
+**Packages/Programs:**
+* OpenCV
+* fswebcam
+* NeoPixel
+* picamera
