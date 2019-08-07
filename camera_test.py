@@ -19,7 +19,7 @@ import imutils
 camera = picamera.PiCamera()
 
 camera.start_preview()
-time.sleep(5)
+time.sleep(500)
 camera.capture('/home/pi/Documents/bubbles/imag.jpg')
 camera.stop_preview()
 
