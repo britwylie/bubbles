@@ -18,11 +18,14 @@ import imutils
 
 camera = picamera.PiCamera()
 
+# Take a picture
 camera.start_preview()
 time.sleep(500)
 camera.capture('/home/pi/Documents/bubbles/imag.jpg')
 camera.stop_preview()
 
+
+# Take a video
 camera.resolution = (640, 480)
 camera.start_recording('test_video.h264')
 camera.wait_recording(5)
