@@ -1,5 +1,4 @@
 #! usr/bin/env python
-
 '''
  blob_detection.py: 
  Get blobs for min circles from a static image
