@@ -34,7 +34,7 @@ blur = cv2.GaussianBlur(gray, (3,3), 0)
 
 
 erode = cv2.erode(blur, None, iterations = 1)
-dil = cv2.dilate(erode, None, iterations = 1)
+dil = cv2.dilate(erode, None, iterations = 2)
 
 th, im_th = cv2.threshold(dil, 150,190, cv2.THRESH_BINARY_INV);
 
@@ -56,8 +56,8 @@ params = cv2.SimpleBlobDetector_Params()
 params.filterByColor = True
 params.blobColor = 0
 
-params.minThreshold = 30
-params.maxThreshold = 200
+params.minThreshold = 10
+params.maxThreshold = 245
 
 params.minDistBetweenBlobs = 3
 
@@ -66,7 +66,7 @@ params.minArea = 1
 params.maxArea = 10
 
 params.filterByConvexity = False
-params.minConvexity = 0.2
+params.minConvexity = 0
 
 params.filterByCircularity = True
 params.minCircularity = 0.1

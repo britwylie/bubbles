@@ -35,12 +35,13 @@ gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 blur = cv2.GaussianBlur(gray, (3, 3), 0)
 
 
-_, thresh = cv2.threshold(gray, 145, 255, cv2.THRESH_BINARY_INV)
+_, thresh = cv2.threshold(gray, 150, 255, cv2.THRESH_BINARY_INV)
 #test = cv2.equalizeHist(thresh)
-laplac = cv2.Canny(thresh, 100, 200)
+laplac = cv2.Canny(thresh, 100, 240)
 inv_laplac = cv2.bitwise_not(laplac)
 erode = cv2.erode(inv_laplac, None, iterations = 1)
 dilated = cv2.dilate(erode, None, iterations = 1)
+water = cv2.watershed(gray)
 
 im_floodfill = dilated.copy()
 # Mask used to flood filling.
@@ -83,7 +84,7 @@ plt.show()
 cv2.waitKey(0)
 
 # detect circles in the image
-circles = cv2.HoughCircles(im_floodfill,cv2.HOUGH_GRADIENT, 0.5, 5,\
+circles = cv2.HoughCircles(gray,cv2.HOUGH_GRADIENT, 0.5, 5,\
  param1 = 70, param2 = 30, minRadius = 2, maxRadius = 10)
 
 
