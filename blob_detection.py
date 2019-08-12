@@ -36,7 +36,7 @@ blur = cv2.GaussianBlur(gray, (3,3), 0)
 erode = cv2.erode(blur, None, iterations = 1)
 dil = cv2.dilate(erode, None, iterations = 2)
 
-th, im_th = cv2.threshold(dil, 150,190, cv2.THRESH_BINARY_INV);
+th, im_th = cv2.threshold(dil, 140,190, cv2.THRESH_BINARY_INV);
 
 im_floodfill = cv2.equalizeHist(im_th.copy())
 
