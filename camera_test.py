@@ -16,20 +16,29 @@ import time
 import sys
 import imutils
 
+a = "1"
 camera = picamera.PiCamera()
 
-# Take a picture
-camera.start_preview()
-time.sleep(500)
-camera.capture('/home/pi/Documents/bubbles/imag.jpg')
-camera.stop_preview()
+while a == "1":
+	# Take a picture
+	camera.start_preview()
+	time.sleep(30)
+	camera.capture('/home/pi/Documents/bubbles/imag.jpg')
+	camera.stop_preview()
+	a = input("Press 1 to retake, 2 to take video, or any other key to quit: ")
 
+	while a == "2":
+		# Take a video for custom dataset
+		camera.resolution = (640, 480)
+		camera.start_recording('test_video.h264')
+		camera.wait_recording(5)
+		camera.stop_recording()
 
-# Take a video
-camera.resolution = (640, 480)
-camera.start_recording('test_video.h264')
-camera.wait_recording(5)
-camera.stop_recording()
+		# Choose what to do next
+		a = input("Retake? Press 1 to take a picture, 2 to retake a video, or any other key to exit: ")
+
+	else if a != "1":
+		break
 
 print('Done')
 
