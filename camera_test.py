@@ -20,7 +20,7 @@ camera = picamera.PiCamera()
 while a == 1:
 	# Take a picture
 	camera.start_preview(fullscreen=False, window = (100, 20,640,480))
-	time.sleep(3)
+	time.sleep(5)
 	camera.capture('/home/pi/Documents/bubbles/imag.jpg')
 	camera.stop_preview()
 	print("Picture taken")
@@ -30,8 +30,8 @@ while a == 1:
 		# Take a video for custom dataset
 		camera.start_preview(fullscreen=False, window=(100,20,640,480))
 		camera.resolution = (640, 480)
-		camera.start_recording('test_video.h264')
-		camera.wait_recording(5)
+		camera.start_recording('test_video1.h264')
+		camera.wait_recording(30)
 		camera.stop_recording()
 		camera.stop_preview()
 	
