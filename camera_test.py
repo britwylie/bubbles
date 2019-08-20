@@ -30,6 +30,8 @@ while a == 1:
 		# Take a video for custom dataset
 		camera.start_preview(fullscreen=False, window=(100,20,640,480))
 		camera.resolution = (640, 480)
+		camera.framerate = 24
+		raw
 		camera.start_recording('test_video1.h264')
 		camera.wait_recording(30)
 		camera.stop_recording()
