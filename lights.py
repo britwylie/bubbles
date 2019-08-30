@@ -1,30 +1,77 @@
-
 '''
-lights.py: sets up neopixels for back lighting
+lights.py: basic picture with three types of lighting
 
 __author__ = "Brit W"
+__email__ = "bwylie@caltech.edu"
 
 '''
 
+import time
 import board
 import neopixel
 import numpy as np
+import picamera
+import sys
+from picamera.array import PiRGBArray
 
-# Change the number to the number of LEDs
-pixels = neopixel.NeoPixel(board.D18, 50)
 
-# value from 0 to 1
-bright = 0.5
+# Choose an open pin connected to the Data In of the NeoPixel strip, i.e. board.D18
+# NeoPixels must be connected to D10, D12, D18 or D21 to work.
+pixel_pin = board.D18
 
-# Color values
-white = (255, 255, 255)
-red = (255, 0, 0)
-green = (0, 255, 0)
+# The number of NeoPixels
+num_pixels = 29
 
-# Current color of LEDs
-ccolor = white
+# The order of the pixel colors - RGB or GRB. Some NeoPixels have red and green reversed!
+ORDER = neopixel.GRB
+PICTURE_WAIT = 5
+RED = (255, 0, 0)
+GREEN = (0, 255, 0)
+BLUE = (0, 0, 255)
+WHITE = (255, 255, 255)
+PICTURE_WAIT = 5
+bright = 0.2
 
-# Turn on LEDs
-pixels.fill(tuple(bright *np.array(ccolor)))
+# Save image to this file 
+IMAG_LOC = '/home/pi/Documents/bubbles/Images/blue.jpg'
 
+pixels = neopixel.NeoPixel(pixel_pin, num_pixels, brightness=0.2, auto_write=False,
+                           pixel_order=ORDER)
+
+
+def clear(num):
+    pixels[num] = (0,0,0)
+    pixels.show()
+    print("Pixel ", num + 1, " has been cleared")
+    
+def clearAll():
+    pixels.fill((0,0,0))
+    pixels.show()
+    print("All pixels cleared")
+    
+a = 1
+camera = picamera.PiCamera()
+
+try:
+    while a == 1 :
+        clearAll()
+
+        color = RED
+        for i in range(8, 14):
+            pixels[i] = color
+        for i in range(3, 6):
+            pixels[i] = tuple([int(bright*i) for i in color])
+        for i in range(16, 19):
+            pixels[i] = tuple([int(bright*i) for i in color])
+        pixels.show()
+        
+        camera.start_preview(fullscreen=False, window = (100, 20,640,480))
+        time.sleep(PICTURE_WAIT)
+        camera.capture(IMAG_LOC)
+        camera.stop_preview()
+        
+        print("Picture taken")
+        
+except KeyboardInterrupt:
+    clearAll()
 
