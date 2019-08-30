@@ -30,10 +30,19 @@ GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
 WHITE = (255, 255, 255)
 PICTURE_WAIT = 5
-bright = 0.2
+bright = 0.75
 
 # Save image to this file 
 IMAG_LOC = '/home/pi/Documents/bubbles/Images/blue.jpg'
+
+# Edit this variable to set length of video
+VIDEO_TIME = 30
+FRAMERATE = 24
+RESOLUTION = (640, 480)
+
+# Save video to this file
+VIDEO_LOC = 'Images/video.h264'
+
 
 pixels = neopixel.NeoPixel(pixel_pin, num_pixels, brightness=0.2, auto_write=False,
                            pixel_order=ORDER)
@@ -56,13 +65,13 @@ try:
     while a == 1 :
         clearAll()
 
-        color = RED
-        for i in range(8, 14):
-            pixels[i] = color
-        for i in range(3, 6):
+        color = WHITE
+        #for i in range(8, 14):
+        #    pixels[i] = color
+        for i in range(27, 28):
             pixels[i] = tuple([int(bright*i) for i in color])
-        for i in range(16, 19):
-            pixels[i] = tuple([int(bright*i) for i in color])
+        #for i in range(16, 19):
+        #    pixels[i] = tuple([int(bright*i) for i in color])
         pixels.show()
         
         camera.start_preview(fullscreen=False, window = (100, 20,640,480))
@@ -72,6 +81,17 @@ try:
         
         print("Picture taken")
         
+        camera.start_preview(fullscreen=False, window=(100,20,640,480))
+        camera.resolution = RESOLUTION
+        camera.framerate = FRAMERATE
+        
+        camera.start_recording('test_video1.h264')
+        camera.wait_recording(VIDEO_TIME)
+        camera.stop_recording()
+        camera.stop_preview()
+        print("Video taken")
+
+		# 
 except KeyboardInterrupt:
     clearAll()
 
