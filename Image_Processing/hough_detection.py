@@ -41,7 +41,7 @@ laplac = cv2.Canny(thresh, 100, 240)
 inv_laplac = cv2.bitwise_not(laplac)
 erode = cv2.erode(inv_laplac, None, iterations = 1)
 dilated = cv2.dilate(erode, None, iterations = 1)
-water = cv2.watershed(gray)
+#water = cv2.watershed(gray)
 
 im_floodfill = dilated.copy()
 # Mask used to flood filling.
