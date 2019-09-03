@@ -35,15 +35,15 @@ hough_output = img.copy()
 
 # grayscale version of jpg
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-blur = cv2.GaussianBlur(gray, (3, 3), 0)
+blur = cv2.GaussianBlur(gray, (7, 7), 0)
 
 
-_, thresh = cv2.threshold(gray, 150, 255, cv2.THRESH_BINARY_INV)
+_, thresh = cv2.threshold(gray, 90, 255, cv2.THRESH_BINARY_INV)
 
 laplac = cv2.Canny(thresh, 100, 200)
 inv_laplac = cv2.bitwise_not(laplac)
-erode = cv2.erode(inv_laplac, None, iterations = 1)
-dilated = cv2.dilate(erode, None, iterations = 1)
+erode = cv2.erode(inv_laplac, None, iterations = 3)
+dilated = cv2.dilate(erode, None, iterations = 3)
 
 
 closed = cv2.morphologyEx(thresh, cv2.MORPH_CLOSE, kernel)
@@ -70,8 +70,8 @@ cv2.waitKey(0)
 
 # contour creation
 
-lower_bound = np.array([0,0,10])
-upper_bound = np.array([255,255,195])
+lower_bound = np.array([0,0,50])
+upper_bound = np.array([255,255,255])
 
 image = img
 
